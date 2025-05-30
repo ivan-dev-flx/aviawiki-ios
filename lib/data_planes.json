@@ -1,0 +1,173 @@
+{
+    "aircraft": [
+      {
+        "id": 1,
+        "name": "F-22 RAPTOR",
+        "subtitle": "STEALTH MULTIROLE FIGHTER",
+        "overview": {
+          "type": "Stealth Multirole Fighter",
+          "manufacturer": "Lockheed Martin",
+          "firstFlight": "September 7, 1997",
+          "role": "Air superiority, ground strike, intelligence, and surveillance"
+        },
+        "tags": ["STEALTH", "5TH GEN", "SUPERCRUISE"],
+        "image": "f22_raptor.png"
+      },
+      {
+        "id": 2,
+        "name": "F-35 LIGHTNING II",
+        "subtitle": "JOINT STRIKE FIGHTER",
+        "overview": {
+          "type": "Multirole Stealth Fighter",
+          "manufacturer": "Lockheed Martin",
+          "firstFlight": "December 15, 2006",
+          "role": "Air-to-air combat, air-to-ground strike, electronic warfare"
+        },
+        "tags": ["STEALTH", "5TH GEN", "VTOL"],
+        "image": "f35_lightning.png"
+      },
+      {
+        "id": 3,
+        "name": "EUROFIGHTER TYPHOON",
+        "subtitle": "TWIN-ENGINE CANARD FIGHTER",
+        "overview": {
+          "type": "Twin-Engine Multirole Fighter",
+          "manufacturer": "Eurofighter Consortium",
+          "firstFlight": "March 27, 1994",
+          "role": "Air superiority, ground attack, reconnaissance"
+        },
+        "tags": ["CANARD", "4TH GEN", "SUPERCRUISE"],
+        "image": "eurofighter_typhoon.png"
+      },
+      {
+        "id": 4,
+        "name": "B-2 SPIRIT",
+        "subtitle": "STEALTH STRATEGIC BOMBER",
+        "overview": {
+          "type": "Heavy Strategic Bomber",
+          "manufacturer": "Northrop Grumman",
+          "firstFlight": "July 17, 1989",
+          "role": "Long-range precision strike, nuclear deterrent"
+        },
+        "tags": ["STEALTH", "BOMBER", "FLYING WING"],
+        "image": "b2_spirit.png"
+      },
+      {
+        "id": 5,
+        "name": "B-52 STRATOFORTRESS",
+        "subtitle": "STRATEGIC HEAVY BOMBER",
+        "overview": {
+          "type": "Long-Range Heavy Bomber",
+          "manufacturer": "Boeing",
+          "firstFlight": "April 15, 1952",
+          "role": "Strategic bombing, close air support, maritime operations"
+        },
+        "tags": ["CLASSIC", "HEAVY", "ENDURANCE"],
+        "image": "b52_stratofortress.png"
+      },
+      {
+        "id": 6,
+        "name": "B-1B LANCER",
+        "subtitle": "SUPERSONIC STRATEGIC BOMBER",
+        "overview": {
+          "type": "Variable-Sweep Wing Bomber",
+          "manufacturer": "Rockwell International",
+          "firstFlight": "December 23, 1974",
+          "role": "Long-range conventional bombing, close air support"
+        },
+        "tags": ["SUPERSONIC", "SWING-WING", "HEAVY"],
+        "image": "b1b_lancer.png"
+      },
+      {
+        "id": 7,
+        "name": "BOEING 737-800",
+        "subtitle": "NARROW-BODY AIRLINER",
+        "overview": {
+          "type": "Short to Medium-Range Airliner",
+          "manufacturer": "Boeing",
+          "firstFlight": "July 31, 1996",
+          "role": "Passenger transport, cargo operations"
+        },
+        "tags": ["COMMERCIAL", "TWIN-ENGINE", "WORKHORSE"],
+        "image": "boeing_737.png"
+      },
+      {
+        "id": 8,
+        "name": "AIRBUS A320",
+        "subtitle": "NARROW-BODY AIRLINER",
+        "overview": {
+          "type": "Short to Medium-Range Airliner",
+          "manufacturer": "Airbus",
+          "firstFlight": "February 22, 1987",
+          "role": "Passenger transport, regional operations"
+        },
+        "tags": ["COMMERCIAL", "FLY-BY-WIRE", "EFFICIENT"],
+        "image": "airbus_a320.png"
+      },
+      {
+        "id": 9,
+        "name": "BOEING 787 DREAMLINER",
+        "subtitle": "WIDE-BODY AIRLINER",
+        "overview": {
+          "type": "Long-Range Wide-Body Airliner",
+          "manufacturer": "Boeing",
+          "firstFlight": "December 15, 2009",
+          "role": "Long-haul passenger transport, cargo operations"
+        },
+        "tags": ["COMPOSITE", "EFFICIENT", "MODERN"],
+        "image": "boeing_787.png"
+      },
+      {
+        "id": 10,
+        "name": "BOEING 777",
+        "subtitle": "WIDE-BODY AIRLINER",
+        "overview": {
+          "type": "Long-Range Wide-Body Airliner",
+          "manufacturer": "Boeing",
+          "firstFlight": "June 12, 1994",
+          "role": "Long-haul passenger transport, freight operations"
+        },
+        "tags": ["TWIN-ENGINE", "LONG-RANGE", "RELIABLE"],
+        "image": "boeing_777.png"
+      },
+      {
+        "id": 11,
+        "name": "C-130 HERCULES",
+        "subtitle": "TACTICAL AIRLIFTER",
+        "overview": {
+          "type": "Four-Engine Turboprop Transport",
+          "manufacturer": "Lockheed Martin",
+          "firstFlight": "August 23, 1954",
+          "role": "Tactical airlift, humanitarian missions, special operations"
+        },
+        "tags": ["TRANSPORT", "TACTICAL", "VERSATILE"],
+        "image": "c130_hercules.png"
+      },
+      {
+        "id": 12,
+        "name": "C-17 GLOBEMASTER III",
+        "subtitle": "STRATEGIC AIRLIFTER",
+        "overview": {
+          "type": "Large Military Transport Aircraft",
+          "manufacturer": "McDonnell Douglas/Boeing",
+          "firstFlight": "September 15, 1991",
+          "role": "Strategic airlift, tactical airlift, medical evacuation"
+        },
+        "tags": ["HEAVY-LIFT", "STRATEGIC", "GLOBAL"],
+        "image": "c17_globemaster.png"
+      },
+      {
+        "id": 13,
+        "name": "A-10 THUNDERBOLT II",
+        "subtitle": "CLOSE AIR SUPPORT AIRCRAFT",
+        "overview": {
+          "type": "Twin-Engine Attack Aircraft",
+          "manufacturer": "Fairchild Republic",
+          "firstFlight": "May 10, 1972",
+          "role": "Close air support, ground attack, forward air control"
+        },
+        "tags": ["TANK-KILLER", "ARMORED", "RUGGED"],
+        "image": "a10_thunderbolt.png"
+      }
+    ]
+  }

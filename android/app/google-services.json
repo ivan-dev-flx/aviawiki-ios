@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "647850129792",
+    "project_id": "aviawiki",
+    "storage_bucket": "aviawiki.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647850129792:android:b8822d530214ab5412a965",
+        "android_client_info": {
+          "package_name": "com.aviawiki"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYGtlERri8-bR7_euPEYMOZlKKrYmkU5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
