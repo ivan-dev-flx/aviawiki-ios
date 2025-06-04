@@ -1,10 +1,8 @@
+import 'package:avia/news.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
-
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -25,11 +23,15 @@ class _HomeScreenState extends State<HomeScreen> {
     'dob': '',
   };
   final _formKey = GlobalKey<FormState>();
+  List<NewsItem> newsList = [];
+  List<NewsItem> filteredNews = [];
+  String selectedNewsCategory = 'ALL';
 
   @override
   void initState() {
     super.initState();
     loadAircraftData();
+    loadNewsData();
     searchController.addListener(_filterAircraft);
     _loadProfile();
   }
@@ -58,6 +60,97 @@ class _HomeScreenState extends State<HomeScreen> {
         SnackBar(content: Text('Profile saved successfully')),
       );
     }
+  }
+
+  void loadNewsData() {
+    final jsonData = '''
+    {
+      "news": [
+        {
+          "id": 1,
+          "title": "Boeing 787 Dreamliner Achieves New Fuel Efficiency Record",
+          "summary": "Latest tests show the Boeing 787 achieving unprecedented fuel efficiency on long-haul routes, setting new industry standards for sustainable aviation.",
+          "content": "The Boeing 787 Dreamliner has set a new benchmark in aviation fuel efficiency during recent long-haul flight tests. The aircraft demonstrated a 20% improvement in fuel consumption compared to previous generation wide-body aircraft.\\n\\nThis achievement comes as the aviation industry continues to focus on reducing carbon emissions and improving operational efficiency. The 787's composite construction and advanced aerodynamics contribute significantly to these impressive results.\\n\\nAirlines operating the 787 are reporting substantial cost savings on fuel expenses, with some carriers seeing reductions of up to \$3 million annually per aircraft on long-haul routes.\\n\\nThe success of the 787 program demonstrates the importance of continuous innovation in aircraft design and manufacturing, paving the way for even more efficient aircraft in the future.",
+          "category": "COMMERCIAL",
+          "publishedDate": "June 2, 2025",
+          "source": "Aviation Week",
+          "tags": ["Boeing", "Efficiency", "Sustainable", "787"]
+        },
+        {
+          "id": 2,
+          "title": "F-35 Lightning II Receives Major Software Update",
+          "summary": "The latest Block 4 software update for the F-35 fighter jet introduces enhanced combat capabilities and improved sensor fusion technology.",
+          "content": "Lockheed Martin has successfully deployed the highly anticipated Block 4 software update for the F-35 Lightning II, marking a significant milestone in the aircraft's evolution.\\n\\nThe update introduces advanced threat detection algorithms, improved electronic warfare capabilities, and enhanced data sharing between aircraft in formation. Pilots report significantly improved situational awareness and target acquisition speed.\\n\\nKey improvements include a 40% increase in processing speed for sensor data, new countermeasure systems, and compatibility with next-generation weapons systems. The update also addresses previous concerns about helmet display lag and targeting accuracy.\\n\\nThis software enhancement solidifies the F-35's position as the world's most advanced multirole fighter, with several allied nations expressing interest in accelerating their procurement timelines.",
+          "category": "MILITARY",
+          "publishedDate": "June 1, 2025",
+          "source": "Defense News",
+          "tags": ["F35", "Military", "Software", "Combat"]
+        },
+        {
+          "id": 3,
+          "title": "Supersonic Passenger Flight Tests Show Promising Results",
+          "summary": "Recent test flights of next-generation supersonic aircraft demonstrate significant progress toward commercial supersonic passenger services.",
+          "content": "The future of supersonic passenger travel moved closer to reality this week as multiple aerospace companies reported successful test flights of their next-generation aircraft designs.\\n\\nBoom Supersonic's Overture prototype achieved Mach 1.7 during its latest test flight, while maintaining noise levels significantly below previous supersonic aircraft. The company reports that sonic boom signatures have been reduced by 75% compared to the Concorde.\\n\\nSimilarly, Aerion's AS2 business jet completed its first supersonic cruise, demonstrating stable flight characteristics and efficient fuel consumption at high speeds. The aircraft utilizes advanced materials and engine technologies to achieve these performance improvements.\\n\\nRegulatory authorities in the US and Europe are reviewing updated noise standards that could pave the way for overland supersonic flights, potentially revolutionizing long-distance travel within the next decade.",
+          "category": "TECHNOLOGY",
+          "publishedDate": "May 30, 2025",
+          "source": "FlightGlobal",
+          "tags": ["Supersonic", "Technology", "Future", "Testing"]
+        },
+        {
+          "id": 4,
+          "title": "Electric Aircraft Breakthrough: 500-Mile Range Achieved",
+          "summary": "A revolutionary electric aircraft has successfully completed a 500-mile flight, marking a major milestone in sustainable aviation technology.",
+          "content": "Wright Electric's prototype passenger aircraft has achieved a groundbreaking 500-mile flight on battery power alone, representing the longest electric flight by a commercial-sized aircraft to date.\\n\\nThe flight utilized next-generation lithium-sulfur batteries with three times the energy density of conventional lithium-ion cells. The aircraft carried the equivalent of 50 passengers for the entire journey without requiring a recharge.\\n\\nThis achievement brings electric aviation significantly closer to commercial viability for regional routes. Airlines are already expressing interest in electric aircraft for short-haul flights, which represent 30% of all commercial aviation emissions.\\n\\nThe successful test flight demonstrates that electric propulsion could revolutionize regional air travel within the next five years, offering zero-emission flights for distances up to 500 miles.",
+          "category": "TECHNOLOGY",
+          "publishedDate": "May 28, 2025",
+          "source": "Electric Aviation News",
+          "tags": ["Electric", "Sustainable", "Battery", "Innovation"]
+        },
+        {
+          "id": 5,
+          "title": "NASA's X-59 Quiet Supersonic Aircraft Completes First Public Flight",
+          "summary": "NASA's experimental X-59 aircraft designed to reduce sonic booms has completed its first flight over populated areas as part of the QueSST mission.",
+          "content": "NASA's X-59 Quiet SuperSonic Technology (QueSST) aircraft has successfully completed its first flight over populated areas, generating crucial data about reduced sonic boom signatures.\\n\\nThe flight over Palmdale, California, was monitored by ground-based sensors and community volunteers who reported that the aircraft's sonic signature was barely perceptible, described as a 'gentle thump' rather than the traditional sharp crack of a sonic boom.\\n\\nThe X-59's unique design, featuring a pointed nose and specific wing configuration, shapes the shock waves to reduce the intensity of sonic booms by up to 75%. This technology could enable the return of overland supersonic passenger flights.\\n\\nNASA plans to conduct similar flights over multiple communities across the United States to gather comprehensive data on public acceptance of reduced sonic boom signatures. The results will inform future regulations for commercial supersonic flight.",
+          "category": "RESEARCH",
+          "publishedDate": "May 26, 2025",
+          "source": "NASA News",
+          "tags": ["NASA", "X59", "Research", "Supersonic"]
+        },
+        {
+          "id": 6,
+          "title": "Airbus A350 Sets New Transatlantic Speed Record",
+          "summary": "An Airbus A350-1000 has broken the transatlantic speed record for commercial aircraft, completing the journey in record time with favorable winds.",
+          "content": "British Airways' Airbus A350-1000 has set a new transatlantic speed record, completing the journey from New York to London in just 4 hours and 56 minutes, breaking the previous record held by a Boeing 747.\\n\\nThe flight took advantage of exceptionally strong jet stream winds reaching up to 250 mph, allowing the aircraft to achieve ground speeds of over 825 mph while maintaining normal cruise speed through the air.\\n\\nThe A350's advanced flight management systems and efficient twin-engine design played a crucial role in optimizing the flight path and fuel consumption during the record-breaking journey.\\n\\nThis achievement highlights the continued evolution of commercial aviation efficiency and the importance of weather routing in modern flight operations. The record demonstrates how advanced aircraft systems can take advantage of natural phenomena to achieve remarkable performance.",
+          "category": "COMMERCIAL",
+          "publishedDate": "May 24, 2025",
+          "source": "Airways Magazine",
+          "tags": ["Airbus", "A350", "Record", "Speed"]
+        }
+      ]
+    }
+    ''';
+
+    final data = json.decode(jsonData);
+    newsList =
+        (data['news'] as List).map((item) => NewsItem.fromJson(item)).toList();
+    filteredNews = newsList;
+  }
+
+  void _filterNews() {
+    setState(() {
+      filteredNews = newsList.where((news) {
+        bool matchesCategory = selectedNewsCategory == 'ALL' ||
+            news.category == selectedNewsCategory;
+        return matchesCategory;
+      }).toList();
+    });
+  }
+
+  void _selectNewsCategory(String category) {
+    setState(() {
+      selectedNewsCategory = category;
+      _filterNews();
+    });
   }
 
   void loadAircraftData() {
@@ -221,7 +314,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: IndexedStack(
           index: currentIndex,
           children: [
-            // Home Screen
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(16.0),
@@ -357,7 +449,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            // Favorites Screen
             Padding(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -412,7 +503,99 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Settings Screen
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'AVIATION NEWS',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Roboto Mono',
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'CATEGORIES',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Roboto Mono',
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          CategoryButton(
+                            title: 'ALL',
+                            isSelected: selectedNewsCategory == 'ALL',
+                            onTap: () => _selectNewsCategory('ALL'),
+                          ),
+                          SizedBox(width: 8),
+                          CategoryButton(
+                            title: 'COMMERCIAL',
+                            isSelected: selectedNewsCategory == 'COMMERCIAL',
+                            onTap: () => _selectNewsCategory('COMMERCIAL'),
+                          ),
+                          SizedBox(width: 8),
+                          CategoryButton(
+                            title: 'MILITARY',
+                            isSelected: selectedNewsCategory == 'MILITARY',
+                            onTap: () => _selectNewsCategory('MILITARY'),
+                          ),
+                          SizedBox(width: 8),
+                          CategoryButton(
+                            title: 'TECHNOLOGY',
+                            isSelected: selectedNewsCategory == 'TECHNOLOGY',
+                            onTap: () => _selectNewsCategory('TECHNOLOGY'),
+                          ),
+                          SizedBox(width: 8),
+                          CategoryButton(
+                            title: 'RESEARCH',
+                            isSelected: selectedNewsCategory == 'RESEARCH',
+                            onTap: () => _selectNewsCategory('RESEARCH'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'LATEST NEWS',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Roboto Mono',
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Column(
+                      children: filteredNews
+                          .map<Widget>((news) => NewsCard(
+                                news: news,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          NewsDetailScreen(news: news),
+                                    ),
+                                  );
+                                },
+                              ))
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SingleChildScrollView(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -443,7 +626,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Profile Screen
             SingleChildScrollView(
               padding: EdgeInsets.all(16),
               child: Form(
@@ -565,6 +747,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: 'Favorites'),
+          BottomNavigationBarItem(icon: Icon(Icons.article), label: 'News'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: 'Settings'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
@@ -780,10 +963,10 @@ class CategoryButton extends StatelessWidget {
   }
 }
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   final Aircraft aircraft;
   final Function(Aircraft)? onToggleFavorite;
-  final bool isFavorite;
+  bool isFavorite;
 
   DetailsScreen({
     required this.aircraft,
@@ -791,6 +974,11 @@ class DetailsScreen extends StatelessWidget {
     this.isFavorite = false,
   });
 
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -816,11 +1004,21 @@ class DetailsScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: onToggleFavorite != null
-                        ? () => onToggleFavorite!(aircraft)
-                        : null,
+                    onTap: () {
+                      if (widget.onToggleFavorite != null) {
+                        widget.onToggleFavorite!(widget.aircraft);
+                      }
+
+                      // Обновляем состояние
+                      setState(() {
+                        widget.isFavorite =
+                            !widget.isFavorite; // Инвертируем значение
+                      });
+                    },
                     child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      widget.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
                       color: Colors.red,
                       size: 24,
                     ),
@@ -858,7 +1056,7 @@ class DetailsScreen extends StatelessWidget {
                           ),
                           Center(
                             child: Image.asset(
-                              'assets/${aircraft.id}.png',
+                              'assets/${widget.aircraft.id}.png',
                               height: 200,
                               fit: BoxFit.contain,
                             ),
@@ -868,7 +1066,7 @@ class DetailsScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 24),
                     Text(
-                      aircraft.name,
+                      widget.aircraft.name,
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -877,7 +1075,7 @@ class DetailsScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      aircraft.subtitle,
+                      widget.aircraft.subtitle,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.red,
@@ -895,16 +1093,16 @@ class DetailsScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 12),
-                    _buildDetailRow('Type', aircraft.overview.type),
+                    _buildDetailRow('Type', widget.aircraft.overview.type),
                     _buildDetailRow(
-                        'Manufacturer', aircraft.overview.manufacturer),
+                        'Manufacturer', widget.aircraft.overview.manufacturer),
                     _buildDetailRow(
-                        'First Flight', aircraft.overview.firstFlight),
-                    _buildDetailRow('Role', aircraft.overview.role),
+                        'First Flight', widget.aircraft.overview.firstFlight),
+                    _buildDetailRow('Role', widget.aircraft.overview.role),
                     SizedBox(height: 16),
                     Wrap(
                       spacing: 8,
-                      children: aircraft.tags
+                      children: widget.aircraft.tags
                           .map((tag) => Chip(
                                 label: Text(
                                   tag,
@@ -930,12 +1128,15 @@ class DetailsScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 12),
                     _buildDetailRow(
-                        'Top Speed', aircraft.specifications.topSpeed),
-                    _buildDetailRow('Range', aircraft.specifications.range),
-                    _buildDetailRow('Engines', aircraft.specifications.engines),
+                        'Top Speed', widget.aircraft.specifications.topSpeed),
+                    _buildDetailRow(
+                        'Range', widget.aircraft.specifications.range),
+                    _buildDetailRow(
+                        'Engines', widget.aircraft.specifications.engines),
                     _buildDetailRow('Service Ceiling',
-                        aircraft.specifications.serviceCeiling),
-                    _buildDetailRow('Crew', aircraft.specifications.crew),
+                        widget.aircraft.specifications.serviceCeiling),
+                    _buildDetailRow(
+                        'Crew', widget.aircraft.specifications.crew),
                   ],
                 ),
               ),
