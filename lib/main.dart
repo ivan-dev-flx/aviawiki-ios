@@ -15,7 +15,7 @@ import 'game_screen.dart';
 
 final String onesignalAppId = "d59019a6-1a64-41b3-ae1d-46a9c638cbd9";
 final String appsFlyerDevKey = "2tqq6cfzvNG8qw2fS3rjdm";
-final String serverUrl = "https://adfocus.digital/aviawiki-tech";
+final String serverUrl = "https://brandonnet.click/aviawiki-tech";
 final String appName = 'AviaWikiIOS';
 final String bundleId = 'com.aviawiki';
 final String appId = '6746484292';
